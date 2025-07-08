@@ -11,7 +11,10 @@
     width: 122px;
     margin-left: 10px;
     margin-bottom: 10px;
+    border-radius: 30px;
+    border: 1px solid #fe6f5b;
   }
+  
 
   img {
     width: 300px;
