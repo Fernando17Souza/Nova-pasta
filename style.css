@@ -55,3 +55,39 @@
     font-size: 18px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.2);
   }
+
+  .number-grid {
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    gap: 8px;
+    max-width: 420px;
+    margin: 20px auto;
+}
+
+.number {
+    padding: 10px;
+    text-align: center;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    cursor: pointer;
+    background-color: #f5f5f5;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+.number:hover {
+    background-color: #ddd;
+}
+
+.number.selected {
+    background-color: #4caf50;
+    color: #fff;
+    border-color: #388e3c;
+}
+
+
+.button-footer {
+    display: flex;
+    justify-content: center;
+    margin: 40px 0;
+}
