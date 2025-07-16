@@ -12,17 +12,23 @@
 <body>
     <img src="./assets/dado1.gif" alt="imagem-dado">
 
-    <h2>Sorteio de Números</h2>
+    <h2> 🎯 Sorteio de Números 🍀</h2>
 
 <label for="max"></label>
 <input type="number" class="input-max" id="max" placeholder="Número max">
 
 <div style="margin-top: 10px;">
+    <button onclick="generateGame(5)">Quina</button>
     <button onclick="generateGame(6)">Mega-Sena</button>
     <button onclick="generateGame(10)">Timemania</button>
     <button onclick="generateGame(15)">Lotofácil</button>
     <button onclick="generateGame(50)">Lotomania</button>
 </div>
+
+<h2>🎯 Gerar número aleatório 🍀</h2>
+<input type="number" id="maxValueInput" placeholder="Digite o número máximo">
+<button onclick="generateSingleByMax()">Gerar Número</button>
+<div id="singleResult" style="margin-top: 10px;"></div>
 
 <h3 style="margin-top: 20px;">Escolha os Números:</h3>
 <div class="number-grid" id="numberGrid">

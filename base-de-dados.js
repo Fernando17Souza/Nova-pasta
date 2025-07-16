@@ -100,6 +100,25 @@ clearBtn.addEventListener('click', () => {
     resultArea.innerHTML = "";
 });
 
+function generateSingleByMax() {
+    const maxInput = document.getElementById("maxValueInput").value;
+    const max = parseInt(maxInput);
+    const min = 0;
+
+    const resultDiv = document.getElementById("singleResult");
+
+    // Validação
+    if (isNaN(max) || max < 1) {
+        resultDiv.innerText = "⚠️ Digite um número máximo válido (maior que 0)";
+        return;
+    }
+
+    const number = Math.floor(Math.random() * (max - min + 1)) + min;
+
+    resultDiv.innerHTML = `<span class="ball">${String(number).padStart(2, '0')}</span>`;
+}
+
+
 
 /*const completeBtn = document.getElementById('completeTo50');
 
