@@ -37,7 +37,7 @@ for (let i = 0; i <= 99; i++) {
     div.addEventListener('click', () => {
         if (!div.classList.contains('selected')) {
             const selected = document.querySelectorAll('.number.selected');
-            if (selected.length >= 20) {
+            if (selected.length >= 50) {
                 alert('Você só pode selecionar até 20 números manualmente.');
                 return;
             }
