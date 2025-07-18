@@ -118,56 +118,36 @@ function generateSingleByMax() {
     resultDiv.innerHTML = `<span class="ball">${String(number).padStart(2, '0')}</span>`;
 }
 
+function generateClover() {
+    const min = parseInt(document.getElementById("cloverMinInput").value);
+    const max = parseInt(document.getElementById("cloverMaxInput").value);
+    const result = document.getElementById("cloverResult");
 
-
-/*const completeBtn = document.getElementById('completeTo50');
-
-completeBtn.addEventListener('click', () => {
-    const selected = Array.from(document.querySelectorAll('.number.selected'));
-    const selectedValues = selected.map(el => parseInt(el.textContent));
-
-    if (selectedValues.length > 50) {
-        alert('Você já selecionou mais de 50 números.');
+    // Validações
+    if (isNaN(min) || isNaN(max) || min < 0 || max <= min) {
+        result.innerText = "⚠️ Informe um intervalo válido (ex: mínimo 10, máximo 99)";
         return;
     }
 
-    if (selectedValues.length > 20) {
-        alert('Você selecionou mais de 20 números manualmente. Limpe ou reduza sua seleção.');
-        return;
+    const numbers = new Set();
+    while (numbers.size < 1) {
+        const number = Math.floor(Math.random() * (max - min + 1)) + min;
+        numbers.add(number);
     }
 
-    const remaining = 50 - selectedValues.length;
-    const available = [];
+    const [n1,] = Array.from(numbers);
 
-    for (let i = 0; i <= 99; i++) {
-        if (!selectedValues.includes(i)) {
-            available.push(i);
-        }
-    }
+    result.innerHTML = `
+        <div class="clover-ball top">${String(n1).padStart(2, '0')}</div>`;
 
-    // Embaralhar disponíveis
-    for (let i = available.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [available[i], available[j]] = [available[j], available[i]];
-    }
+    // 🎯 Botão para limpar seleção
+    const clearBtn = document.getElementById('clearSelection');
 
-    const toSelect = available.slice(0, remaining);
+    clearBtn.addEventListener('click', () => {
+    const selected = document.querySelectorAll('.number.selected');
+    selected.forEach(el => el.classList.remove('selected'));
 
-    // Marca os números automaticamente
-    const allDivs = document.querySelectorAll('.number');
-    toSelect.forEach(num => {
-        const numStr = num.toString().padStart(2, '0');
-        allDivs.forEach(div => {
-            if (div.textContent === numStr) {
-                div.classList.add('selected');
-            }
-        });
-    });
-
-    // Mostrar resultado (opcional)
-    const finalSet = [...selectedValues, ...toSelect].sort((a, b) => a - b);
-    const resultArea = document.querySelector(".result");
-    resultArea.innerHTML = finalSet
-        .map(n => `<span class="ball">${String(n).padStart(2, '0')}</span>`)
-        .join("");
-}); */
+    const resultArea = document.querySelector(".clover-container");
+    resultArea.innerHTML = "";
+});
+}

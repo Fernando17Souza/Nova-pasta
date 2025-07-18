@@ -10,7 +10,7 @@
     <title>Sorteador</title>
 </head>
 <body>
-    <img src="./assets/dado1.gif" alt="imagem-dado">
+    <img src="./assets/d9a3a326-16a9-460c-808f-9cf103015fb0.png" alt="imagem-dado">
 
     <h2> 🎯 Sorteio de Números 🍀</h2>
 
@@ -18,29 +18,31 @@
 <input type="number" class="input-max" id="max" placeholder="Número max">
 
 <div style="margin-top: 10px;">
-    <button onclick="generateGame(5)">Quina</button>
-    <button onclick="generateGame(6)">Mega-Sena</button>
-    <button onclick="generateGame(10)">Timemania</button>
-    <button onclick="generateGame(15)">Lotofácil</button>
-    <button onclick="generateGame(50)">Lotomania</button>
+    <button onclick="generateGame(5)" class="quina">Quina</button>
+    <button onclick="generateGame(6)" class="mega">Mega-Sena</button>
+    <button onclick="generateGame(10)" class="time">Timemania</button>
+    <button onclick="generateGame(15)" class="loto">Lotofácil</button>
+    <button onclick="generateGame(50)" class="mania">Lotomania</button>
 </div>
-
-<h2>🎯 Gerar número aleatório 🍀</h2>
-<input type="number" id="maxValueInput" placeholder="Digite o número máximo">
-<button onclick="generateSingleByMax()">Gerar Número</button>
-<div id="singleResult" style="margin-top: 10px;"></div>
 
 <h3 style="margin-top: 20px;">Escolha os Números:</h3>
 <div class="number-grid" id="numberGrid">
 </div>
 
 <div class="button-footer">
-  <button id="completeTo30">Completar Jogo</button>
-  <button id="clearSelection" style="margin-left: 10px;">Limpar Seleção</button>
+  <button id="completeTo30" class="button-complete">Completar Jogo</button>
+  <button id="clearSelection" style="margin-left: 10px;" class="button-clear">Limpar Seleção</button>
 </div>
 
 
 <div class="result"></div>
+
+<h2>🎯 Gerar número aleatório 🍀</h2>
+<input type="number" id="cloverMinInput" class="min-input" placeholder="Mínimo">
+<input type="number" id="cloverMaxInput" class="max-input" placeholder="Máximo">
+<button onclick="generateClover()" class="button-gerar">Gerar Número</button>
+
+<div id="cloverResult" class="clover-container"></div>
 </body>
 <script src="./base-de-dados.js"></script>
 </html>

@@ -3,6 +3,7 @@
     font-family: Arial, sans-serif;
     padding: 20px;
     text-align: center; /* Centraliza tudo dentro do body */
+    background-color: #F5F5DC;
   }
 
   input {
@@ -12,12 +13,13 @@
     margin-left: 10px;
     margin-bottom: 10px;
     border-radius: 30px;
-    border: 1px solid #fe6f5b;
+    border: 1px solid #a8a7a7;
   }
   
 
   img {
     width: 300px;
+    height: 300px;
     display: block;
     margin-left: auto;
     margin-right: auto;
@@ -30,7 +32,7 @@
   button {
     margin: 5px;
     padding: 8px 12px;
-    font-size: 16px;
+    font-size: 17px;
     cursor: pointer;
   }
 
@@ -62,6 +64,7 @@
     gap: 8px;
     max-width: 420px;
     margin: 20px auto;
+    font-size: 17px;
 }
 
 .number {
@@ -104,4 +107,76 @@
     text-align: center;
     margin: 4px;
     font-weight: bold;
+}
+
+
+
+.clover-ball {
+    display: inline-block;
+    background:#DC143C;
+    color: white;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    line-height: 32px;
+    text-align: center;
+    margin: 4px;
+    font-weight: bold;
+}
+
+
+.quina {
+  color: #FFFFFF;
+  background: #390061;
+  border-radius: 20px;
+  border: 1px solid transparent;
+}
+
+.mega {
+  color: #FFFFFF;
+  background: #228B22;
+  border-radius: 20px;
+  border: 1px solid transparent;
+}
+
+.time {
+  color: black;
+  background: 	#FFFF00;
+  border-radius: 20px;
+  border: 1px solid transparent;
+}
+
+.loto {
+  color: #FFFFFF;
+  background:#A020F0;
+  border-radius: 20px;
+  border: 1px solid transparent;
+}
+
+.mania {
+  color: #FFFFFF;
+  background:#FF8C00;
+  border-radius: 20px;
+  border: 1px solid transparent;
+}
+
+.button-gerar {
+  color: black;
+  background:	#B0E0E6;
+  border-radius: 20px;
+  border: 1px solid transparent;
+}
+
+.button-complete {
+  background:#4F4F4F;
+  color: #FFFFFF;
+  border-radius: 20px;
+  border: 1px solid transparent;
+}
+
+.button-clear {
+  background:#B0C4DE;
+  color: black;
+  border-radius: 20px;
+  border: 1px solid transparent;
 }
