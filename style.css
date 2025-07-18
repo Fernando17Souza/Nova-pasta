@@ -111,12 +111,12 @@
 
 
 .clover-ball {
-    display: inline-block;
+    display:inline-block;
     background:#DC143C;
     color: white;
-    border-radius: 50%;
-    width: 32px;
-    height: 32px;
+    border-radius: 30%;
+    width: 100px;
+    height: auto;
     line-height: 32px;
     text-align: center;
     margin: 4px;
@@ -179,3 +179,16 @@
   border-radius: 20px;
   border: 1px solid transparent;
 }
+
+button:hover{
+  opacity: 0.8;
+}
+
+button:active{
+  opacity: 0.9;
+}
+
+
+
+
+

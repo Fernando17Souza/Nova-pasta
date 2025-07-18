@@ -118,36 +118,39 @@ function generateSingleByMax() {
     resultDiv.innerHTML = `<span class="ball">${String(number).padStart(2, '0')}</span>`;
 }
 
+
 function generateClover() {
     const min = parseInt(document.getElementById("cloverMinInput").value);
     const max = parseInt(document.getElementById("cloverMaxInput").value);
+    const quantity = parseInt(document.getElementById("cloverQtyInput").value);
     const result = document.getElementById("cloverResult");
 
     // Validações
-    if (isNaN(min) || isNaN(max) || min < 0 || max <= min) {
-        result.innerText = "⚠️ Informe um intervalo válido (ex: mínimo 10, máximo 99)";
-        return;
+    if (isNaN(min) || isNaN(max) || isNaN(quantity) || min < 0 || max <= min || quantity < 1 || quantity > (max - min + 1)){
+        result.innerHTML = "⚠️ Valores Inválidos! Verifique a Quantidade, Mínimo e Máximo.";
+        return
     }
 
     const numbers = new Set();
-    while (numbers.size < 1) {
+    while (numbers.size < quantity) {
         const number = Math.floor(Math.random() * (max - min + 1)) + min;
         numbers.add(number);
     }
 
-    const [n1,] = Array.from(numbers);
-
-    result.innerHTML = `
-        <div class="clover-ball top">${String(n1).padStart(2, '0')}</div>`;
+    const sortedNumber = Array.from(numbers).sort((a, b) => a - b);
+    result.innerHTML = sortedNumber
+    .map(num => `<div class="clover-ball">${String(num).padStart(2, 0)}</div>`)
+    .join("");
 
     // 🎯 Botão para limpar seleção
-    const clearBtn = document.getElementById('clearSelection');
+    const clearBtn = document.getElementById("clearSelection");
 
-    clearBtn.addEventListener('click', () => {
-    const selected = document.querySelectorAll('.number.selected');
-    selected.forEach(el => el.classList.remove('selected'));
-
-    const resultArea = document.querySelector(".clover-container");
-    resultArea.innerHTML = "";
-});
+    clearBtn.addEventListener("click", () => {
+        const selected = document.querySelectorAll(".number.selected");
+        selected.forEach(el => el.classList.remove("selected"));
+        
+        const resultArea = document.querySelector(".clover-container");
+        resultArea.innerHTML = "";
+    });
 }
+

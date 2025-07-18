@@ -10,6 +10,7 @@
     <title>Sorteador</title>
 </head>
 <body>
+
     <img src="./assets/d9a3a326-16a9-460c-808f-9cf103015fb0.png" alt="imagem-dado">
 
     <h2> 🎯 Sorteio de Números 🍀</h2>
@@ -30,16 +31,15 @@
 </div>
 
 <div class="button-footer">
-  <button id="completeTo30" class="button-complete">Completar Jogo</button>
-  <button id="clearSelection" style="margin-left: 10px;" class="button-clear">Limpar Seleção</button>
+  <button id="completeTo30" class="button-complete">Completar Jogo 🍀</button>
+  <button id="clearSelection" style="margin-left: 10px;" class="button-clear">Limpar Seleção 🧹</button>
 </div>
-
 
 <div class="result"></div>
 
-<h2>🎯 Gerar número aleatório 🍀</h2>
-<input type="number" id="cloverMinInput" class="min-input" placeholder="Mínimo">
-<input type="number" id="cloverMaxInput" class="max-input" placeholder="Máximo">
+<h2>🎯 Gerar Número Aleatório 🍀</h2>
+<h3> Sortear<input type="number" id="cloverQtyInput" min="1" style="height: 20px; width: 172px;" class="input-quantity" placeholder="Quantidade Desejada"> Número</h3>
+<b>Entre</b><input type="number" id="cloverMinInput" min="0" class="min-input" placeholder="Mínimo"><b> E</b><input type="number" id="cloverMaxInput" min="1" class="max-input" placeholder="Máximo">
 <button onclick="generateClover()" class="button-gerar">Gerar Número</button>
 
 <div id="cloverResult" class="clover-container"></div>
