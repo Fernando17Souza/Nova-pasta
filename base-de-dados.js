@@ -38,7 +38,7 @@ for (let i = 0; i <= 99; i++) {
         if (!div.classList.contains('selected')) {
             const selected = document.querySelectorAll('.number.selected');
             if (selected.length >= 50) {
-                alert('Você só pode selecionar até 20 números manualmente.');
+                alert('Você só pode selecionar até 50 números manualmente.');
                 return;
             }
         }
