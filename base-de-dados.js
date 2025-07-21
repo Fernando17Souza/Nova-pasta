@@ -154,3 +154,53 @@ function generateClover() {
     });
 }
 
+
+
+
+
+function generateFromUserNumbers() {
+    const input = document.getElementById("userBaseNumbers").value;
+    const gameQty = parseInt(document.getElementById("userGameQty").value);
+    const perGameQty = parseInt(document.getElementById("userPerGameQty").value);
+    const resultArea = document.getElementById("userResultArea");
+
+    if (!input) {
+        resultArea.innerHTML = "⚠️ Digite os números-base.";
+        return;
+    }
+
+    const baseNumbers = input
+        .split(",")
+        .map(n => parseInt(n.trim()))
+        .filter(n => !isNaN(n) && n >= 0 && n <= 99);
+
+    if (baseNumbers.length < perGameQty) {
+        resultArea.innerHTML = `⚠️ É necessário ter ao menos ${perGameQty} números válidos.`;
+        return;
+    }
+
+    resultArea.innerHTML = ""; // Limpa resultados anteriores
+
+    for (let i = 0; i < gameQty; i++) {
+        const game = [];
+
+        const pool = [...baseNumbers];
+        // Embaralha os números base
+        for (let j = pool.length - 1; j > 0; j--) {
+            const r = Math.floor(Math.random() * (j + 1));
+            [pool[j], pool[r]] = [pool[r], pool[j]];
+        }
+
+        game.push(...pool.slice(0, perGameQty));
+        game.sort((a, b) => a - b);
+
+        const div = document.createElement("div");
+        div.classList.add("game");
+
+        div.innerHTML = game
+            .map(n => `<span class="ball">${String(n).padStart(2, '0')}</span>`)
+            .join("");
+
+        resultArea.appendChild(div);
+    }
+}
