@@ -64,7 +64,7 @@
   <script>
     // Configurações
     const gameConfig = {
-      "mega-sena": { maxNumber: 60, numbersPerGame: 6, apiName: 'mega-sena' },
+      "mega-sena": { maxNumber: 60, numbersPerGame: 6, apiName: 'megasena' },
       "lotofacil": { maxNumber: 25, numbersPerGame: 15, apiName: 'lotofacil' },
       "lotomania": { maxNumber: 100, numbersPerGame: 50, apiName: 'lotomania' }
     };
@@ -112,8 +112,8 @@
       }
     }
 
-    // Função para buscar histórico dos últimos 50 concursos via API Brainn
-   async function loadHistory() {
+    // Função para buscar histórico dos últimos 50 concursos via API pública funcional
+    async function loadHistory() {
   clearAll();
   const type = selectGameType.value;
   lastDrawInfo.textContent = 'Carregando histórico...';
@@ -160,7 +160,6 @@
     console.error(e);
   }
 }
-
     // Gera mapa de frequência do histórico
     function getFrequencyMap() {
       const freq = {};
@@ -171,6 +170,52 @@
       });
       return freq;
     }
+
+    // Calcula a chance de vitória baseado na soma das frequências dos números do jogo
+function calculateGameChance(game) {
+  const freqMap = getFrequencyMap();
+  let sumFreq = 0;
+  game.forEach(n => {
+    sumFreq += (freqMap[n] || 0);
+  });
+
+  // Máximo possível
+  const maxFreq = Math.max(...Object.values(freqMap));
+  const maxPossible = maxFreq * game.length;
+
+  // Evita divisão por zero
+  if (maxPossible === 0) return { raw: 0, percent: 0 };
+
+  const percent = (sumFreq / maxPossible) * 100;
+
+  return { raw: sumFreq, percent: percent.toFixed(2) };
+}
+
+// Modifica displayGames para exibir o destaque da chance e média de acertos históricos
+function displayGames(gamesWithScore) {
+  gamesDiv.innerHTML = '';
+  if (gamesWithScore.length === 0) return;
+
+  // Ordena do maior score para o menor, se já não estiver ordenado
+  gamesWithScore.sort((a, b) => b.score - a.score);
+
+  gamesWithScore.forEach((item, i) => {
+    const destaque = i === 0 ? "bg-green-200 border border-green-600" : "bg-white border border-gray-300";
+    const fontSize = i === 0 ? "text-xl font-bold" : "text-base";
+    const color = i === 0 ? "text-green-800" : "text-gray-700";
+    jogosDiv.innerHTML += `
+      <div class="p-3 rounded mb-2 ${destaque} flex items-center justify-between">
+        <div>
+          <strong>Jogo ${i + 1}:</strong> ${item.jogo.join(", ")}
+        </div>
+        <div class="${fontSize} ${color} flex items-center gap-1">
+          ${i === 0 ? '⭐' : ''}
+          <span>${item.score.toFixed(2)}%</span>
+        </div>
+      </div>
+    `;
+  });
+}
 
     // Verifica se é primo
     function isPrime(n) {
@@ -373,20 +418,42 @@
     }
 
     // Exibe jogos na tela
-    function displayGames(games) {
-      gamesDiv.innerHTML = '';
-      games.forEach(game => {
-        const div = document.createElement('div');
-        div.className = 'bg-blue-100 rounded p-3 shadow flex flex-wrap justify-center';
-        div.innerHTML = game.map(n => {
+function displayGames(games) {
+  gamesDiv.innerHTML = '';
+  games.forEach(game => {
+    const chanceObj = calculateGameChance(game);
+    const chancePercent = chanceObj.percent;
+    const chanceRaw = chanceObj.raw;
+
+    const maxCheck = Math.min(historyData.length, 50);
+    let totalHits = 0;
+    for (let i = 0; i < maxCheck; i++) {
+      const concurso = historyData[i];
+      const hits = game.filter(n => concurso.dezenas.includes(n)).length;
+      totalHits += hits;
+    }
+    const avgHits = (totalHits / maxCheck).toFixed(2);
+
+    const div = document.createElement('div');
+    div.className = 'bg-blue-100 rounded p-3 shadow flex flex-col items-center gap-1';
+    div.innerHTML = `
+      <div class="flex flex-wrap justify-center mb-2">
+        ${game.map(n => {
           const isInLastDraw = lastDraw.includes(n);
           return `<span class="inline-block w-8 h-8 rounded-full mx-1 mb-1 text-center leading-8 font-semibold ${
             isInLastDraw ? 'bg-green-600 text-white' : 'bg-blue-600 text-white'
           }">${String(n).padStart(2, '0')}</span>`;
-        }).join('');
-        gamesDiv.appendChild(div);
-      });
-    }
+        }).join('')}
+      </div>
+      <div class="text-sm text-gray-700">
+        <strong>Chance (freq. soma):</strong> ${chanceRaw} (${chancePercent}%)<br/>
+        <strong>Média acertos últimos 50:</strong> ${avgHits}
+      </div>
+    `;
+    gamesDiv.appendChild(div);
+  });
+}
+
 
     // Limpa jogos e validação
     function clearGamesAndValidation() {
@@ -430,6 +497,10 @@
       gamesDiv.innerHTML = '';
       validationDiv.innerHTML = '';
     });
+
+    const maxFreq = Math.max(...Object.values(freqMap));
+    const maxPossible = maxFreq * game.length;
+    const relativeChance = (sumFreq / maxPossible) * 100;
   </script>
 </body>
 </html>
