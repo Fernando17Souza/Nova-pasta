@@ -2,577 +2,434 @@
 <html lang="pt-br">
 <head>
   <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Gerador com Base em Resultado</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Gerador Loteria Completo</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-100 p-6">
-  <h1 class="text-2xl font-bold mb-4">🎯 Gerador de Jogos com Base nos Resultados</h1>
+<body class="bg-gray-100 p-6 min-h-screen">
+  <h1 class="text-3xl font-bold mb-6 text-center">🎯 Gerador de Jogos Loteria</h1>
 
-  <div class="mb-4 grid grid-cols-1 md:grid-cols-3 gap-4">
-    <div>
-      <label class="block font-semibold mb-1">Modalidade:</label>
-      <select id="gameType" onchange="onGameTypeChange()" class="border rounded px-2 py-1 w-full">
-        <option value="megasena">Mega-Sena</option>
-        <option value="lotofacil">Lotofácil</option>
-        <option value="lotomania">Lotomania</option>
-      </select>
-    </div>
-
-    <div>
-      <label class="block font-semibold mb-1">Números por jogo:</label>
-      <input id="basePerGame" type="number" value="6" min="1" max="60" class="border rounded px-2 py-1 w-full" readonly/>
-    </div>
-
-    <div>
-      <label class="block font-semibold mb-1">Qtd. Jogos:</label>
-      <input id="baseQty" type="number" value="3" min="1" max="20" class="border rounded px-2 py-1 w-full"/>
-    </div>
-  </div>
-
-  <div class="mb-4">
-    <label class="block font-semibold mb-1">Números Base (separados por vírgula):</label>
-    <input id="userBase" type="text" placeholder="Ex: 5,12,23..." class="border rounded px-2 py-1 w-full mb-2"/>
-    <button onclick="useUserBase()" class="bg-blue-600 text-white px-4 py-1 rounded">🎲 Gerar com Números Digitados</button>
-  </div>
-
-  <div class="mb-4 flex flex-wrap gap-2">
-    <button onclick="fetchAndGenerate()" class="bg-green-600 text-white px-4 py-1 rounded">📥 Buscar último resultado + gerar</button>
-    <button onclick="clearResults()" class="bg-red-500 text-white px-4 py-1 rounded">🧹 Limpar Jogos</button>
-    <div id="lastDisplay" class="mt-2 text-sm"></div>
-  </div>
-
-  <!-- 🔧 Painel de Configurações Avançadas -->
-  <div class="mb-6 bg-white p-4 rounded shadow">
-    <h3 class="text-lg font-semibold mb-2">🔧 Configurações Avançadas</h3>
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+  <div class="max-w-4xl mx-auto bg-white p-6 rounded shadow">
+    <div class="mb-5 grid grid-cols-1 sm:grid-cols-3 gap-4">
       <div>
-        <label class="block mb-1 font-medium">Excluir:</label>
-        <div><input type="checkbox" id="noEven" /> <label for="noEven">Números pares</label></div>
-        <div><input type="checkbox" id="noOdd" /> <label for="noOdd">Números ímpares</label></div>
-        <div><input type="checkbox" id="noPrime" /> <label for="noPrime">Números primos</label></div>
-      </div>
-      <div>
-        <label class="block mb-1 font-medium">Mínimo por jogo:</label>
-        <div class="mb-1">
-          <label>Pares:</label>
-          <input type="number" id="minEven" value="0" class="w-20 px-1 py-0.5 border rounded ml-2" />
-        </div>
-        <div class="mb-1">
-          <label>Ímpares:</label>
-          <input type="number" id="minOdd" value="0" class="w-20 px-1 py-0.5 border rounded ml-2" />
-        </div>
-        <div>
-          <label>Primos:</label>
-          <input type="number" id="minPrime" value="0" class="w-20 px-1 py-0.5 border rounded ml-2" />
-        </div>
-      </div>
-      <div class="text-sm text-gray-600">
-        <p>Essas configurações são opcionais.</p>
-        <p>Você pode combinar as opções para filtrar os jogos gerados.</p>
-      </div>
-    </div>
-  </div>
-
-  <!-- 🔍 Estratégias Avançadas de Probabilidade -->
-  <div class="mb-6 bg-white p-4 rounded shadow">
-    <h3 class="text-lg font-semibold mb-2">📈 Estratégias Avançadas</h3>
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-      <div>
-        <label class="block mb-1 font-medium">Quentes x Frios:</label>
-        <select id="hotColdStrategy" class="w-full px-2 py-1 border rounded">
-          <option value="balanced">Balanceado (60% quentes, 40% frios)</option>
-          <option value="hot">Apenas quentes (top frequência)</option>
-          <option value="cold">Apenas frios (menos saem)</option>
-          <option value="random">Mistura aleatória</option>
+        <label class="font-semibold mb-1 block">Modalidade</label>
+        <select id="gameType" class="border rounded w-full p-2">
+          <option value="mega-sena">Mega-Sena</option>
+          <option value="lotofacil">Lotofácil</option>
+          <option value="lotomania">Lotomania</option>
         </select>
       </div>
-
       <div>
-        <label class="block mb-1 font-medium">Distribuição por faixa:</label>
-        <select id="rangeStrategy" class="w-full px-2 py-1 border rounded">
-          <option value="balanced">Distribuir entre faixas (ex: 1–10, 11–20...)</option>
-          <option value="free">Sem controle</option>
-        </select>
+        <label class="font-semibold mb-1 block">Números por jogo</label>
+        <input id="numbersPerGame" type="number" min="1" class="border rounded w-full p-2" readonly/>
+      </div>
+      <div>
+        <label class="font-semibold mb-1 block">Quantidade de jogos</label>
+        <input id="gamesQuantity" type="number" min="1" max="50" value="3" class="border rounded w-full p-2"/>
       </div>
     </div>
+
+    <div class="flex justify-center gap-4 mb-6">
+      <button id="btnLoadHistory" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition">📥 Carregar Histórico (Últimos 50)</button>
+      <button id="btnGenerateSmart" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition">🎲 Gerar Jogos Inteligentes</button>
+      <button id="btnGenerateRandom" class="bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700 transition">🎲 Gerar Jogos Aleatórios</button>
+      <button id="btnClear" class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 transition">🧹 Limpar</button>
+    </div>
+
+    <section id="lastResultSection" class="mb-6">
+      <h2 class="text-xl font-semibold mb-2">Último Resultado</h2>
+      <div id="lastResult" class="flex flex-wrap gap-1"></div>
+      <div id="lastDrawInfo" class="mt-2 text-sm text-gray-600"></div>
+    </section>
+
+    <section id="statsSection" class="mb-6">
+      <h2 class="text-xl font-semibold mb-2">Estatísticas do Histórico</h2>
+      <div id="stats"></div>
+    </section>
+
+    <section id="gamesSection" class="mb-6">
+      <h2 class="text-xl font-semibold mb-2">Jogos Gerados</h2>
+      <div id="games" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3"></div>
+    </section>
+
+    <section id="validationSection" class="mb-6">
+      <h2 class="text-xl font-semibold mb-2">Validação dos Jogos</h2>
+      <div id="validation"></div>
+    </section>
+
+    <canvas id="freqChart" height="150"></canvas>
   </div>
-
-  <h2 class="text-xl font-semibold mt-4 mb-2">Jogos Gerados:</h2>
-  <div id="games" class="mb-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
-
-  <div class="mb-4">
-    <canvas id="freqChart" width="400" height="200"></canvas>
-  </div>
-
-  <div id="stats" class="mb-4"></div>
-  <div id="history" class="bg-white p-4 rounded shadow"></div>
 
   <script>
-    let allGenerated = [];
-    let lastResultGlobal = [];
-    let currentChart = null;
-    let historicalResults = [];
-    const MAX_HISTORY = 50;
-
+    // Configurações
     const gameConfig = {
-      megasena: { urlLatest: 'https://loteriascaixa-api.herokuapp.com/api/megasena/latest', numbers: 6, max: 60, fetchHistory: fetchMegaSenaHistory },
-      lotofacil: { urlLatest: 'https://loteriascaixa-api.herokuapp.com/api/lotofacil/latest', numbers: 15, max: 25, fetchHistory: fetchLotoFacilHistory },
-      lotomania: { urlLatest: 'https://loteriascaixa-api.herokuapp.com/api/lotomania/latest', numbers: 50, max: 100, fetchHistory: fetchLotoManiaHistory },
+      "mega-sena": { maxNumber: 60, numbersPerGame: 6, apiName: 'mega-sena' },
+      "lotofacil": { maxNumber: 25, numbersPerGame: 15, apiName: 'lotofacil' },
+      "lotomania": { maxNumber: 100, numbersPerGame: 50, apiName: 'lotomania' }
     };
 
-    function onGameTypeChange() {
-      const type = document.getElementById('gameType').value;
-      document.getElementById('basePerGame').value = gameConfig[type].numbers;
-      clearResults();
-      document.getElementById('lastDisplay').innerText = '';
-      lastResultGlobal = [];
-      historicalResults = [];
-      document.getElementById('history').innerHTML = '';
-      document.getElementById('userBase').value = '';
+    // Estado
+    let historyData = [];
+    let lastDraw = [];
+    let currentChart = null;
+
+    // Elementos DOM
+    const selectGameType = document.getElementById('gameType');
+    const inputNumbersPerGame = document.getElementById('numbersPerGame');
+    const inputGamesQuantity = document.getElementById('gamesQuantity');
+    const btnLoadHistory = document.getElementById('btnLoadHistory');
+    const btnGenerateSmart = document.getElementById('btnGenerateSmart');
+    const btnGenerateRandom = document.getElementById('btnGenerateRandom');
+    const btnClear = document.getElementById('btnClear');
+    const lastResultDiv = document.getElementById('lastResult');
+    const lastDrawInfo = document.getElementById('lastDrawInfo');
+    const statsDiv = document.getElementById('stats');
+    const gamesDiv = document.getElementById('games');
+    const validationDiv = document.getElementById('validation');
+    const freqChartCtx = document.getElementById('freqChart').getContext('2d');
+
+    // Atualiza números por jogo baseado na modalidade
+    function updateNumbersPerGame() {
+      const type = selectGameType.value;
+      inputNumbersPerGame.value = gameConfig[type].numbersPerGame;
+      clearAll();
     }
 
-    async function fetchLatestResult(type) {
-      const res = await fetch(gameConfig[type].urlLatest);
-      if (!res.ok) throw new Error('Falha ao buscar último resultado');
-      const json = await res.json();
-      return json;
-    }
+    selectGameType.addEventListener('change', updateNumbersPerGame);
+    updateNumbersPerGame();
 
-    async function fetchMegaSenaHistory() {
-      const lastConcursoRes = await fetch('https://loteriascaixa-api.herokuapp.com/api/megasena/latest');
-      if (!lastConcursoRes.ok) throw new Error('Falha ao buscar último concurso da Mega-Sena');
-      const lastConcursoJson = await lastConcursoRes.json();
-      const lastNum = Number(lastConcursoJson.numero);
-
-      let concursos = [];
-      for(let i = 0; i < MAX_HISTORY; i++) {
-        const num = lastNum - i;
-        if (num <= 0) break;
-        const res = await fetch(`https://loteriascaixa-api.herokuapp.com/api/megasena/${num}`);
-        if (!res.ok) break;
-        const json = await res.json();
-        concursos.push(json);
-      }
-      return concursos;
-    }
-
-    async function fetchLotoFacilHistory() {
-      const lastConcursoRes = await fetch('https://loteriascaixa-api.herokuapp.com/api/lotofacil/latest');
-      if (!lastConcursoRes.ok) throw new Error('Falha ao buscar último concurso da Lotofácil');
-      const lastConcursoJson = await lastConcursoRes.json();
-      const lastNum = Number(lastConcursoJson.numero);
-
-      let concursos = [];
-      for(let i = 0; i < MAX_HISTORY; i++) {
-        const num = lastNum - i;
-        if (num <= 0) break;
-        const res = await fetch(`https://loteriascaixa-api.herokuapp.com/api/lotofacil/${num}`);
-        if (!res.ok) break;
-        const json = await res.json();
-        concursos.push(json);
-      }
-      return concursos;
-    }
-
-    async function fetchLotoManiaHistory() {
-      const lastConcursoRes = await fetch('https://loteriascaixa-api.herokuapp.com/api/lotomania/latest');
-      if (!lastConcursoRes.ok) throw new Error('Falha ao buscar último concurso da Lotomania');
-      const lastConcursoJson = await lastConcursoRes.json();
-      const lastNum = Number(lastConcursoJson.numero);
-
-      let concursos = [];
-      for(let i = 0; i < MAX_HISTORY; i++) {
-        const num = lastNum - i;
-        if (num <= 0) break;
-        const res = await fetch(`https://loteriascaixa-api.herokuapp.com/api/lotomania/${num}`);
-        if (!res.ok) break;
-        const json = await res.json();
-        concursos.push(json);
-      }
-      return concursos;
-    }
-
-    function renderLastResult(json, type) {
-      let dezenas = json.dezenas;
-      if (!Array.isArray(dezenas)) dezenas = dezenas.split(',').map(x => parseInt(x,10));
-      lastResultGlobal = dezenas.filter(n => !isNaN(n));
-
-      document.getElementById('lastDisplay').innerHTML = 'Último resultado: ' +
-        lastResultGlobal.map(n => `<span class="inline-block bg-red-600 text-white rounded-full w-8 h-8 text-center leading-8 mx-1">${String(n).padStart(2,'0')}</span>`).join(' ');
-
-      const historyEl = document.getElementById('history');
-      historyEl.innerHTML = `
-        <h3 class="text-lg font-bold mb-2">📅 Último Concurso - ${type.charAt(0).toUpperCase() + type.slice(1)}</h3>
-        <div><strong>Concurso:</strong> ${json.numero}</div>
-        <div><strong>Data:</strong> ${json.data}</div>
-        <div><strong>Dezenas:</strong> ${lastResultGlobal.map(n => `<span class="inline-block bg-red-500 text-white rounded-full w-8 h-8 text-center leading-8 font-semibold mx-1">${n}</span>`).join(' ')}</div>
-      `;
-    }
-
-    function calculateFrequency(historyArray, maxNumber) {
-      const freqMap = new Map();
-      for(let i=1; i <= maxNumber; i++) freqMap.set(i, 0);
-      historyArray.forEach(concurso => {
-        let dezenas = concurso.dezenas;
-        if (!Array.isArray(dezenas)) dezenas = dezenas.split(',').map(x => parseInt(x,10));
-        dezenas.forEach(n => {
-          if (freqMap.has(n)) freqMap.set(n, freqMap.get(n) + 1);
-        });
-      });
-      return freqMap;
-    }
-
-    function getTopFrequentNumbers(freqMap, topN = 5) {
-      if (freqMap instanceof Map) {
-        return Array.from(freqMap.entries())
-          .sort((a, b) => b[1] - a[1])
-          .slice(0, topN)
-          .map(([num]) => num);
-      } else {
-        return Object.entries(freqMap)
-          .sort((a, b) => b[1] - a[1])
-          .slice(0, topN)
-          .map(([num]) => Number(num));
-      }
-    }
-
-    function getNumbersByStrategy(freqMap, count, maxNumber) {
-      const strategy = document.getElementById("hotColdStrategy").value;
-      let freqArr = Array.from(freqMap.entries()).sort((a, b) => b[1] - a[1]);
-
-      if (strategy === 'cold') freqArr.reverse();
-      if (strategy === 'random') {
-        freqArr = freqArr.sort(() => Math.random() - 0.5);
-        return freqArr.slice(0, count).map(x => x[0]);
-      }
-
-      const hotCount = Math.ceil(count * (strategy === 'hot' ? 1 : 0.6));
-      const coldCount = count - hotCount;
-
-      const hot = freqArr.slice(0, count * 2).map(x => x[0]);
-      const cold = freqArr.slice(-count * 2).map(x => x[0]);
-
-      const selected = [
-        ...getRandomSubset(hot, Math.min(hotCount, hot.length)),
-        ...getRandomSubset(cold, Math.min(coldCount, cold.length))
-      ];
-
-      return selected.slice(0, count);
-    }
-
-    function generateGame(perGame, fixedNumbers, freqMap, maxNumber) {
-      const needed = perGame - fixedNumbers.length;
-      let pool = [];
-      for (let i = 1; i <= maxNumber; i++) {
-        if (!fixedNumbers.includes(i)) pool.push(i);
-      }
-
-      pool = pool.filter(n => !lastResultGlobal.includes(n));
-
-      const noEven = document.getElementById("noEven").checked;
-      const noOdd = document.getElementById("noOdd").checked;
-      const noPrime = document.getElementById("noPrime").checked;
-
-      pool = pool.filter(n => {
-        if (noEven && n % 2 === 0) return false;
-        if (noOdd && n % 2 !== 0) return false;
-        if (noPrime && isPrime(n)) return false;
-        return true;
-      });
-
-      const filteredFreq = new Map();
-      pool.forEach(n => filteredFreq.set(n, freqMap.get(n) || 0));
-
-      const minEven = parseInt(document.getElementById("minEven").value) || 0;
-      const minOdd = parseInt(document.getElementById("minOdd").value) || 0;
-      const minPrime = parseInt(document.getElementById("minPrime").value) || 0;
-      const rangeStrategy = document.getElementById("rangeStrategy").value;
-
-      let attempt = 0;
-      while (attempt < 2000) {
-        const smartNumbers = getNumbersByStrategy(filteredFreq, needed, maxNumber);
-        const fullGame = [...fixedNumbers, ...smartNumbers].sort((a, b) => a - b);
-
-        const countEven = fullGame.filter(n => n % 2 === 0).length;
-        const countOdd = fullGame.length - countEven;
-        const countPrime = fullGame.filter(isPrime).length;
-
-        // Estratégia por faixa (1–10, 11–20, ...)
-        const ranges = {};
-        fullGame.forEach(n => {
-          const faixa = Math.floor((n - 1) / 10);
-          ranges[faixa] = (ranges[faixa] || 0) + 1;
-        });
-
-        const faixaOk = rangeStrategy === "free" || Object.keys(ranges).length >= Math.ceil(perGame / 3);
-
-        if (
-          countEven >= minEven &&
-          countOdd >= minOdd &&
-          countPrime >= minPrime &&
-          faixaOk
-        ) {
-          return fullGame;
-        }
-        attempt++;
-      }
-
-      return [...fixedNumbers, ...getNumbersByStrategy(filteredFreq, needed, maxNumber)].sort((a, b) => a - b);
-    }
-
-    function getRandomSubset(array, size) {
-      const shuffled = [...array];
-      for(let i = shuffled.length -1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i+1));
-        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-      }
-      return shuffled.slice(0,size);
-    }
-
-    function testGameInHistory(gameArray, history) {
-      for(const concurso of history) {
-        let dezenas = concurso.dezenas;
-        if(!Array.isArray(dezenas)) dezenas = dezenas.split(',').map(x => parseInt(x,10));
-        const acertos = gameArray.filter(n => dezenas.includes(n)).length;
-        if(acertos === gameArray.length) {
-          return { won: true, concurso: concurso.numero, data: concurso.data, acertos };
-        }
-      }
-
-      let maxAcertos = 0;
-      let bestConcurso = null;
-      for(const concurso of history) {
-        let dezenas = concurso.dezenas;
-        if(!Array.isArray(dezenas)) dezenas = dezenas.split(',').map(x => parseInt(x,10));
-        const acertos = gameArray.filter(n => dezenas.includes(n)).length;
-        if(acertos > maxAcertos) {
-          maxAcertos = acertos;
-          bestConcurso = concurso;
-        }
-      }
-      if(maxAcertos > 0 && bestConcurso) {
-        return { won: false, concurso: bestConcurso.numero, data: bestConcurso.data, acertos: maxAcertos };
-      }
-      return { won: false, concurso: null, data: null, acertos: 0 };
-    }
-
-    function clearResults() {
-      document.getElementById('games').innerHTML = '';
-      document.getElementById('stats').innerHTML = '';
-      if(currentChart) {
+    // Limpa todas as seções
+    function clearAll() {
+      lastResultDiv.innerHTML = '';
+      lastDrawInfo.textContent = '';
+      statsDiv.innerHTML = '';
+      gamesDiv.innerHTML = '';
+      validationDiv.innerHTML = '';
+      if (currentChart) {
         currentChart.destroy();
         currentChart = null;
       }
-      allGenerated = [];
     }
 
-    async function fetchAndGenerate() {
-      clearResults();
-      const type = document.getElementById('gameType').value;
-      const perGame = gameConfig[type].numbers;
-      const maxNumber = gameConfig[type].max;
-      const qty = parseInt(document.getElementById('baseQty').value) || 3;
+    // Função para buscar histórico dos últimos 50 concursos via API Brainn
+   async function loadHistory() {
+  clearAll();
+  const type = selectGameType.value;
+  lastDrawInfo.textContent = 'Carregando histórico...';
 
-      document.getElementById('lastDisplay').innerText = 'Carregando resultados...';
-
-      try {
-        const latest = await fetchLatestResult(type);
-        renderLastResult(latest, type);
-
-        historicalResults = await gameConfig[type].fetchHistory();
-
-        const freqMap = calculateFrequency(historicalResults, maxNumber);
-        const topFrequentNumbers = getTopFrequentNumbers(freqMap, 5);
-
-        let fixedNumbers = [];
-
-        // Para todas modalidades removi fixação do último resultado e uso dos mais frequentes no lugar
-        fixedNumbers = topFrequentNumbers;
-
-        allGenerated = [];
-        const generatedSet = new Set();
-        const gamesDiv = document.getElementById('games');
-        gamesDiv.innerHTML = '';
-
-        let attempts = 0;
-        while (generatedSet.size < qty && attempts < 3000) {
-          let game;
-
-          if(type === 'megasena') {
-            // Na Mega-Sena, excluir números do último resultado e incluir os mais frequentes fixos
-            const pool = Array.from({length: maxNumber}, (_, i) => i + 1)
-              .filter(n => !lastResultGlobal.includes(n) && !fixedNumbers.includes(n));
-            game = [...fixedNumbers, ...getRandomSubset(pool, perGame - fixedNumbers.length)].sort((a,b) => a-b);
-          } else {
-            // Nas outras modalidades
-            game = generateGame(perGame, fixedNumbers, freqMap, maxNumber);
-          }
-
-          const key = game.join(',');
-          if(!generatedSet.has(key)) {
-            if(!(type === 'megasena' && key === lastResultGlobal.slice().sort((a,b) => a-b).join(','))) {
-              generatedSet.add(key);
-              allGenerated.push(...game);
-
-              const test = testGameInHistory(game, historicalResults);
-
-              const div = document.createElement('div');
-              div.className = 'bg-white p-3 rounded shadow';
-
-              div.innerHTML = `
-                <div class="mb-2">
-                  ${game.map(n => {
-                    const isMostFrequent = topFrequentNumbers.includes(n);
-                    const isLast = lastResultGlobal.includes(n);
-                    const bgClass = isMostFrequent 
-                      ? 'bg-yellow-500' 
-                      : (isLast ? 'bg-green-600' : 'bg-blue-600');
-                    return `<span class="inline-block ${bgClass} text-white rounded-full w-8 h-8 text-center leading-8 mx-1">${String(n).padStart(2,'0')}</span>`;
-                  }).join('')}
-                </div>
-                <div class="text-sm text-gray-700">
-                  ${test.won ? 
-                    `<strong class="text-green-700">Jogo já ganhou no concurso ${test.concurso} (${test.data})! 🎉</strong>` : 
-                    (test.acertos > 0 ? `Maior acerto: ${test.acertos} números no concurso ${test.concurso} (${test.data})` : 'Nunca saiu nos últimos 50 concursos.')}
-                </div>
-              `;
-              gamesDiv.appendChild(div);
-            }
-          }
-          attempts++;
-          if(attempts >= 3000) {
-            console.warn('Limite de tentativas atingido.');
-            break;
-          }
-        }
-
-        // Estatísticas dos jogos gerados
-        const freq = {};
-        allGenerated.forEach(n => freq[n] = (freq[n] || 0) + 1);
-        const sortedFreq = Object.entries(freq).sort((a,b) => b[1] - a[1]);
-
-        const pares = allGenerated.filter(n => n % 2 === 0).length;
-        const impares = allGenerated.length - pares;
-        const primos = allGenerated.filter(isPrime).length;
-
-        const statsEl = document.getElementById('stats');
-        const mediaAcertos = allGenerated.length
-          ? (allGenerated.filter(n => lastResultGlobal.includes(n)).length / (allGenerated.length / perGame))
-          : 0;
-
-        statsEl.innerHTML = `
-          <h3 class="font-semibold text-lg mb-2">📊 Estatísticas dos Jogos Gerados:</h3>
-          <div><strong>Números mais gerados:</strong> ${sortedFreq.slice(0, 5).map(([n,c]) => `${n}(${c})`).join(', ')}</div>
-          <div><strong>Média de acertos por jogo:</strong> ${mediaAcertos.toFixed(2)}</div>
-          <div><strong>Total Pares:</strong> ${pares}, <strong>Ímpares:</strong> ${impares}, <strong>Primos:</strong> ${primos}</div>
-        `;
-
-        renderChart(freq);
-
-      } catch (error) {
-        document.getElementById('lastDisplay').innerText = `❌ ${error.message}`;
-      }
+  try {
+    // URLs da nova API (ajuste por modalidade)
+    let url = '';
+    if (type === 'mega-sena') {
+      url = 'https://loteriascaixa-api.herokuapp.com/api/megasena?limit=50';
+    } else if (type === 'lotofacil') {
+      url = 'https://loteriascaixa-api.herokuapp.com/api/lotofacil?limit=50';
+    } else if (type === 'lotomania') {
+      url = 'https://loteriascaixa-api.herokuapp.com/api/lotomania?limit=50';
     }
 
-    function useUserBase() {
-      clearResults();
-      const baseCsv = document.getElementById('userBase').value;
-      const gamesQty = parseInt(document.getElementById('baseQty').value) || 1;
-      const perGame = parseInt(document.getElementById('basePerGame').value) || 6;
+    const response = await fetch(url);
+    if (!response.ok) throw new Error('Falha na requisição');
+    const data = await response.json();
 
-      const baseNums = baseCsv.split(',')
-        .map(n => parseInt(n.trim()))
-        .filter(n => !isNaN(n));
+    // A API retorna um array de concursos recentes
+    historyData = data.map(item => ({
+      concurso: item.concurso,
+      data: item.data,
+      dezenas: item.dezenas.map(n => parseInt(n, 10)),
+    }));
 
-      if(baseNums.length < perGame) {
-        alert(`Insira pelo menos ${perGame} números válidos.`);
-        return;
-      }
+    lastDraw = historyData[0].dezenas;
 
-      allGenerated = [];
-      const generatedSet = new Set();
-      const gamesDiv = document.getElementById('games');
-      gamesDiv.innerHTML = '';
+    // Exibe último resultado
+    lastResultDiv.innerHTML = '';
+    lastDraw.forEach(n => {
+      const span = document.createElement('span');
+      span.textContent = String(n).padStart(2, '0');
+      span.className = 'inline-block bg-red-600 text-white rounded-full w-8 h-8 text-center font-semibold mr-1 mb-1';
+      lastResultDiv.appendChild(span);
+    });
+    lastDrawInfo.textContent = `Último concurso: ${historyData[0].concurso} — Data: ${historyData[0].data}`;
 
-      let attempts = 0;
-      while(generatedSet.size < gamesQty && attempts < 1000) {
-        const gameArray = getRandomSubset(baseNums, perGame).sort((a,b) => a-b);
-        const key = gameArray.join(',');
+    // Exibe estatísticas
+    renderStats();
 
-        if(!generatedSet.has(key)) {
-          generatedSet.add(key);
-          allGenerated.push(...gameArray);
+  } catch (e) {
+    lastDrawInfo.textContent = 'Erro ao carregar histórico. Tente novamente.';
+    console.error(e);
+  }
+}
 
-          // Calcular frequência para destacar números mais frequentes na base atual
-          const freq = {};
-          allGenerated.forEach(n => freq[n] = (freq[n] || 0) + 1);
-          const topFrequentNumbers = getTopFrequentNumbers(freq, 5);
-
-          const div = document.createElement('div');
-          div.className = 'bg-white p-3 rounded shadow mb-2';
-
-          div.innerHTML = gameArray.map(n => {
-            const isMostFrequent = topFrequentNumbers.includes(n);
-            const isLast = lastResultGlobal.includes(n);
-            const bgClass = isMostFrequent 
-              ? 'bg-yellow-500' 
-              : (isLast ? 'bg-green-600' : 'bg-blue-600');
-            return `<span class="inline-block ${bgClass} text-white rounded-full w-8 h-8 text-center leading-8 mx-1">${String(n).padStart(2,'0')}</span>`;
-          }).join('');
-
-          gamesDiv.appendChild(div);
-        }
-        attempts++;
-      }
-
-      renderChart(allGenerated.reduce((acc, n) => {
-        acc[n] = (acc[n] || 0) + 1;
-        return acc;
-      }, {}));
+    // Gera mapa de frequência do histórico
+    function getFrequencyMap() {
+      const freq = {};
+      historyData.forEach(c => {
+        c.dezenas.forEach(n => {
+          freq[n] = (freq[n] || 0) + 1;
+        });
+      });
+      return freq;
     }
 
-    function renderChart(freq) {
-      const ctx = document.getElementById('freqChart').getContext('2d');
+    // Verifica se é primo
+    function isPrime(n) {
+      if (n < 2) return false;
+      for (let i = 2; i <= Math.sqrt(n); i++) {
+        if (n % i === 0) return false;
+      }
+      return true;
+    }
 
-      const labels = Object.keys(freq).map(n => n.toString());
-      const data = Object.values(freq);
+    // Renderiza estatísticas básicas
+    function renderStats() {
+      const freqMap = getFrequencyMap();
+      let totalCount = 0;
+      let sum = 0;
+      let pares = 0, impares = 0, primos = 0;
 
-      if(currentChart) currentChart.destroy();
+      Object.entries(freqMap).forEach(([num, count]) => {
+        const n = parseInt(num);
+        totalCount += count;
+        sum += n * count;
+        if (n % 2 === 0) pares += count;
+        else impares += count;
+        if (isPrime(n)) primos += count;
+      });
 
-      currentChart = new Chart(ctx, {
+      const avg = (sum / totalCount).toFixed(2);
+      const sortedFreq = Object.entries(freqMap).sort((a, b) => b[1] - a[1]);
+
+      statsDiv.innerHTML = `
+        <p><strong>Números mais frequentes:</strong> ${sortedFreq.slice(0,7).map(e => `${e[0]} (${e[1]})`).join(', ')}</p>
+        <p><strong>Números menos frequentes:</strong> ${sortedFreq.slice(-7).map(e => `${e[0]} (${e[1]})`).join(', ')}</p>
+        <p><strong>Total de números sorteados:</strong> ${totalCount}</p>
+        <p><strong>Pares:</strong> ${pares}, <strong>Ímpares:</strong> ${impares}</p>
+        <p><strong>Primos:</strong> ${primos}</p>
+        <p><strong>Soma média dos números:</strong> ${avg}</p>
+      `;
+
+      renderChart(freqMap);
+    }
+
+    // Renderiza gráfico de frequência com Chart.js
+    function renderChart(freqMap) {
+      if (currentChart) currentChart.destroy();
+
+      const labels = [];
+      const data = [];
+      const maxNum = gameConfig[selectGameType.value].maxNumber;
+      for (let i = 1; i <= maxNum; i++) {
+        labels.push(String(i));
+        data.push(freqMap[i] || 0);
+      }
+
+      currentChart = new Chart(freqChartCtx, {
         type: 'bar',
         data: {
           labels,
           datasets: [{
             label: 'Frequência',
             data,
-            backgroundColor: 'rgba(59, 130, 246, 0.7)',
-            borderColor: 'rgba(59, 130, 246, 1)',
-            borderWidth: 1,
+            backgroundColor: 'rgba(37, 99, 235, 0.7)'
           }]
         },
         options: {
+          responsive: true,
           scales: {
             y: { beginAtZero: true, precision: 0 }
-          }
+          },
+          plugins: { legend: { display: false } }
         }
       });
     }
 
-    function isPrime(num) {
-      if (num <= 1) return false;
-      if (num <= 3) return true;
-      if (num % 2 === 0 || num % 3 === 0) return false;
-      for(let i = 5; i * i <= num; i += 6) {
-        if (num % i === 0 || num % (i+2) === 0) return false;
+    // Sorteia um subconjunto aleatório de array
+    function getRandomSubset(array, size) {
+      const copy = [...array];
+      for (let i = copy.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [copy[i], copy[j]] = [copy[j], copy[i]];
       }
-      return true;
+      return copy.slice(0, size);
     }
 
-    // Inicialização
-    onGameTypeChange();
+    // Gera jogos inteligentes com frequência ponderada
+    function generateSmartGames() {
+      if (historyData.length === 0) {
+        alert('Carregue o histórico antes de gerar jogos.');
+        return;
+      }
+
+      clearGamesAndValidation();
+
+      const type = selectGameType.value;
+      const maxNum = gameConfig[type].maxNumber;
+      const perGame = parseInt(inputNumbersPerGame.value, 10);
+      const qty = parseInt(inputGamesQuantity.value, 10);
+      const freqMap = getFrequencyMap();
+      const lastSorted = [...lastDraw].sort((a,b) => a-b);
+
+      const generatedSet = new Set();
+      const games = [];
+
+      // Função para selecionar números com base em frequência ponderada
+      function weightedPick(pool, count) {
+        const weightedPool = [];
+        pool.forEach(n => {
+          const w = (freqMap[n] || 0) + 1; // mínimo 1 peso
+          for (let i = 0; i < w; i++) weightedPool.push(n);
+        });
+        const chosen = new Set();
+        while (chosen.size < count && weightedPool.length > 0) {
+          const pick = weightedPool[Math.floor(Math.random() * weightedPool.length)];
+          chosen.add(pick);
+        }
+        return Array.from(chosen);
+      }
+
+      for (let i = 0; i < qty; i++) {
+        let game = [];
+
+        if (type === 'lotomania' || type === 'lotofacil') {
+          // Sempre 5 números do último sorteio
+          const fixed = getRandomSubset(lastSorted, 5);
+
+          const allNumbers = Array.from({ length: maxNum }, (_, i) => i + 1);
+          // Remove os fixos do último sorteio para pegar os restantes
+          const exclude = (type === 'lotomania') ? fixed : lastSorted;
+          const available = allNumbers.filter(n => !exclude.includes(n));
+
+          const restCount = perGame - 5;
+          const rest = weightedPick(available, restCount);
+          game = fixed.concat(rest);
+        } else {
+          // Mega Sena - não repetir números do último sorteio
+          const allNumbers = Array.from({ length: maxNum }, (_, i) => i + 1);
+          const available = allNumbers.filter(n => !lastSorted.includes(n));
+          game = weightedPick(available, perGame);
+        }
+
+        game.sort((a,b) => a - b);
+        const key = game.join(',');
+        if (generatedSet.has(key)) {
+          i--;
+          continue;
+        }
+        generatedSet.add(key);
+        games.push(game);
+      }
+
+      displayGames(games);
+      validateGames(games);
+    }
+
+    // Gera jogos totalmente aleatórios (sem considerar histórico)
+    function generateRandomGames() {
+      if (historyData.length === 0) {
+        alert('Carregue o histórico antes de gerar jogos.');
+        return;
+      }
+
+      clearGamesAndValidation();
+
+      const type = selectGameType.value;
+      const maxNum = gameConfig[type].maxNumber;
+      const perGame = parseInt(inputNumbersPerGame.value, 10);
+      const qty = parseInt(inputGamesQuantity.value, 10);
+      const lastSorted = [...lastDraw].sort((a,b) => a-b);
+
+      const generatedSet = new Set();
+      const games = [];
+
+      for (let i = 0; i < qty; i++) {
+        let game = [];
+
+        if (type === 'lotomania' || type === 'lotofacil') {
+          const fixed = getRandomSubset(lastSorted, 5);
+          const allNumbers = Array.from({ length: maxNum }, (_, i) => i + 1);
+          const exclude = (type === 'lotomania') ? fixed : lastSorted;
+          const available = allNumbers.filter(n => !exclude.includes(n));
+          const rest = getRandomSubset(available, perGame - 5);
+          game = fixed.concat(rest);
+        } else {
+          const allNumbers = Array.from({ length: maxNum }, (_, i) => i + 1);
+          const available = allNumbers.filter(n => !lastSorted.includes(n));
+          game = getRandomSubset(available, perGame);
+        }
+
+        game.sort((a,b) => a - b);
+        const key = game.join(',');
+        if (generatedSet.has(key)) {
+          i--;
+          continue;
+        }
+        generatedSet.add(key);
+        games.push(game);
+      }
+
+      displayGames(games);
+      validateGames(games);
+    }
+
+    // Exibe jogos na tela
+    function displayGames(games) {
+      gamesDiv.innerHTML = '';
+      games.forEach(game => {
+        const div = document.createElement('div');
+        div.className = 'bg-blue-100 rounded p-3 shadow flex flex-wrap justify-center';
+        div.innerHTML = game.map(n => {
+          const isInLastDraw = lastDraw.includes(n);
+          return `<span class="inline-block w-8 h-8 rounded-full mx-1 mb-1 text-center leading-8 font-semibold ${
+            isInLastDraw ? 'bg-green-600 text-white' : 'bg-blue-600 text-white'
+          }">${String(n).padStart(2, '0')}</span>`;
+        }).join('');
+        gamesDiv.appendChild(div);
+      });
+    }
+
+    // Limpa jogos e validação
+    function clearGamesAndValidation() {
+      gamesDiv.innerHTML = '';
+      validationDiv.innerHTML = '';
+    }
+
+    // Valida jogos contra últimos concursos
+    function validateGames(games) {
+      if (historyData.length === 0) {
+        validationDiv.innerHTML = '<em>Carregue o histórico antes para validar jogos.</em>';
+        return;
+      }
+
+      const maxCheck = Math.min(historyData.length, 50);
+      const hitsCount = {};
+
+      games.forEach(game => {
+        for (let i = 0; i < maxCheck; i++) {
+          const concurso = historyData[i];
+          const hits = game.filter(n => concurso.dezenas.includes(n)).length;
+          hitsCount[hits] = (hitsCount[hits] || 0) + 1;
+        }
+      });
+
+      const entries = Object.entries(hitsCount).sort((a, b) => b[0] - a[0]);
+
+      validationDiv.innerHTML = '<ul class="list-disc pl-5">';
+      entries.forEach(([hits, count]) => {
+        validationDiv.innerHTML += `<li><strong>${hits} acertos:</strong> ${count} vezes</li>`;
+      });
+      validationDiv.innerHTML += '</ul>';
+    }
+
+    // Eventos dos botões
+    btnLoadHistory.addEventListener('click', loadHistory);
+    btnGenerateSmart.addEventListener('click', generateSmartGames);
+    btnGenerateRandom.addEventListener('click', generateRandomGames);
+    btnClear.addEventListener('click', () => {
+      clearAll();
+      gamesDiv.innerHTML = '';
+      validationDiv.innerHTML = '';
+    });
   </script>
 </body>
 </html>
