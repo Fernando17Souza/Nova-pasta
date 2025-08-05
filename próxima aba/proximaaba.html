@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Gerador Loteria Completo</title>
+  
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Chart.js via CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <!-- Link para o CSS separado -->
+  <link rel="stylesheet" href="./proximastyle.css" />
+</head>
+<body class="bg-gray-100 p-6 min-h-screen">
+  <h1 class="text-3xl font-bold mb-6 text-center">🎯 Gerador de Jogos Loteria</h1>
+
+  <div class="max-w-4xl mx-auto bg-white p-6 rounded shadow">
+    <div class="mb-5 grid grid-cols-1 sm:grid-cols-3 gap-4">
+      <div>
+        <label class="font-semibold mb-1 block">Modalidade</label>
+        <select id="gameType" class="border rounded w-full p-2">
+          <option value="mega-sena">Mega-Sena</option>
+          <option value="lotofacil">Lotofácil</option>
+          <option value="lotomania">Lotomania</option>
+        </select>
+      </div>
+      <div>
+        <label class="font-semibold mb-1 block">Números por jogo</label>
+        <input id="numbersPerGame" type="number" min="1" class="border rounded w-full p-2" readonly/>
+      </div>
+      <div>
+        <label class="font-semibold mb-1 block">Quantidade de jogos</label>
+        <input id="gamesQuantity" type="number" min="1" max="50" value="3" class="border rounded w-full p-2"/>
+      </div>
+    </div>
+
+    <div class="flex justify-center gap-4 mb-6">
+      <button id="btnLoadHistory" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition">📥 Carregar Histórico (Últimos 50)</button>
+      <button id="btnGenerateSmart" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition">🎲 Gerar Jogos Inteligentes</button>
+      <button id="btnGenerateRandom" class="bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700 transition">🎲 Gerar Jogos Aleatórios</button>
+      <button id="btnClear" class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 transition">🧹 Limpar</button>
+    </div>
+
+    <section id="lastResultSection" class="mb-6">
+      <h2 class="text-xl font-semibold mb-2">Último Resultado</h2>
+      <div id="lastResult" class="flex flex-wrap gap-1"></div>
+      <div id="lastDrawInfo" class="mt-2 text-sm text-gray-600"></div>
+    </section>
+
+    <section id="statsSection" class="mb-6">
+      <h2 class="text-xl font-semibold mb-2">Estatísticas do Histórico</h2>
+      <div id="stats"></div>
+    </section>
+
+    <section id="gamesSection" class="mb-6">
+      <h2 class="text-xl font-semibold mb-2">Jogos Gerados</h2>
+      <div id="games" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3"></div>
+    </section>
+
+    <section id="validationSection" class="mb-6">
+      <h2 class="text-xl font-semibold mb-2">Validação dos Jogos</h2>
+      <div id="validation"></div>
+    </section>
+
+    <canvas id="freqChart" height="150"></canvas>
+
+    <!-- Loader / Spinner -->
+    <div id="loader" class="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center hidden">
+      <div class="loader ease-linear rounded-full border-8 border-t-8 border-gray-200 h-16 w-16"></div>
+    </div>
+
+  </div>
+
+  <!-- Link para o JS separado -->
+  <script src="./proximojs.js"></script>
+</body>
+</html>

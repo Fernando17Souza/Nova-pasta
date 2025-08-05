@@ -1,0 +1,10 @@
+/* Loader Spinner Animado */
+.loader {
+  border-top-color: #3498db;
+  animation: spin 1s linear infinite;
+}
+
+/* Animação de giro */
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
